@@ -69,6 +69,12 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'blog-posts': BlogPost;
+    jobs: Job;
+    products: Product;
+    'custom-solutions': CustomSolution;
+    faqs: Faq;
+    stats: Stat;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,13 +84,19 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
+    jobs: JobsSelect<false> | JobsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    'custom-solutions': CustomSolutionsSelect<false> | CustomSolutionsSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    stats: StatsSelect<false> | StatsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {};
   globalsSelect: {};
@@ -120,7 +132,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -144,7 +156,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -160,10 +172,214 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts".
+ */
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  category?: string | null;
+  description?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  date?: string | null;
+  readTime?: string | null;
+  coverImage?: (number | null) | Media;
+  author?: string | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jobs".
+ */
+export interface Job {
+  id: number;
+  slug: string;
+  title: string;
+  location?: string | null;
+  type?: ('Full time' | 'Part time' | 'Contract' | 'Intern') | null;
+  salaryRange?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  responsibilities?:
+    | {
+        item?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  requirements?:
+    | {
+        item?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  qualifications?:
+    | {
+        item?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  benefits?:
+    | {
+        item?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  techStack?:
+    | {
+        tech?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  image?: (number | null) | Media;
+  applyBefore?: string | null;
+  status?: ('open' | 'closed') | null;
+  date?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  slug: string;
+  name: string;
+  subtitle?: string | null;
+  heroImage?: (number | null) | Media;
+  gallery?:
+    | {
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  features?:
+    | {
+        title?: string | null;
+        subtitle?: string | null;
+        iconKey?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  overview?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  specs?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  price?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-solutions".
+ */
+export interface CustomSolution {
+  id: number;
+  slug: string;
+  title: string;
+  description?: string | null;
+  image?: (number | null) | Media;
+  features?:
+    | {
+        title?: string | null;
+        subtitle?: string | null;
+        iconKey?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  category?: string | null;
+  price?: string | null;
+  available?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: string;
+  locale?: ('en' | 'ja') | null;
+  category?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats".
+ */
+export interface Stat {
+  id: number;
+  label: string;
+  value: string;
+  iconKey?: string | null;
+  type: 'animated' | 'static';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -180,20 +396,44 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'blog-posts';
+        value: number | BlogPost;
+      } | null)
+    | ({
+        relationTo: 'jobs';
+        value: number | Job;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'custom-solutions';
+        value: number | CustomSolution;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'stats';
+        value: number | Stat;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -203,10 +443,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -226,7 +466,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -271,6 +511,154 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts_select".
+ */
+export interface BlogPostsSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  category?: T;
+  description?: T;
+  body?: T;
+  date?: T;
+  readTime?: T;
+  coverImage?: T;
+  author?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jobs_select".
+ */
+export interface JobsSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  location?: T;
+  type?: T;
+  salaryRange?: T;
+  description?: T;
+  responsibilities?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  requirements?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  qualifications?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  benefits?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  techStack?:
+    | T
+    | {
+        tech?: T;
+        id?: T;
+      };
+  image?: T;
+  applyBefore?: T;
+  status?: T;
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  slug?: T;
+  name?: T;
+  subtitle?: T;
+  heroImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        iconKey?: T;
+        id?: T;
+      };
+  overview?: T;
+  specs?: T;
+  price?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-solutions_select".
+ */
+export interface CustomSolutionsSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  description?: T;
+  image?: T;
+  features?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        iconKey?: T;
+        id?: T;
+      };
+  category?: T;
+  price?: T;
+  available?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  locale?: T;
+  category?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats_select".
+ */
+export interface StatsSelect<T extends boolean = true> {
+  label?: T;
+  value?: T;
+  iconKey?: T;
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
