@@ -75,6 +75,7 @@ export interface Config {
     'custom-solutions': CustomSolution;
     faqs: Faq;
     stats: Stat;
+    'audit-logs': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     'custom-solutions': CustomSolutionsSelect<false> | CustomSolutionsSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     stats: StatsSelect<false> | StatsSelect<true>;
+    'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -375,6 +377,73 @@ export interface Stat {
   createdAt: string;
 }
 /**
+ * Automatic audit trail of all document changes (read-only)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs".
+ */
+export interface AuditLog {
+  id: number;
+  /**
+   * The collection that was modified (e.g., "blog-posts")
+   */
+  collection: string;
+  /**
+   * The ID of the document that was modified
+   */
+  documentId: string;
+  /**
+   * The type of operation performed
+   */
+  action: 'create' | 'update' | 'delete';
+  /**
+   * ID of the user who made the change
+   */
+  userId?: number | null;
+  /**
+   * Cached email/name of user (for performance)
+   */
+  userName?: string | null;
+  /**
+   * When the change occurred
+   */
+  timestamp: string;
+  /**
+   * Field-level changes: { field, oldValue, newValue, path }[]
+   */
+  changes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Optional: Why was this change made?
+   */
+  changeReason?: string | null;
+  /**
+   * Client IP address
+   */
+  ip?: string | null;
+  /**
+   * Browser/client information
+   */
+  userAgent?: string | null;
+  /**
+   * Auto-incrementing version number for this document
+   */
+  version: number;
+  /**
+   * Critical snapshot to preserve (e.g., published version)
+   */
+  isSnapshot?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -429,6 +498,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stats';
         value: number | Stat;
+      } | null)
+    | ({
+        relationTo: 'audit-logs';
+        value: number | AuditLog;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -657,6 +730,26 @@ export interface StatsSelect<T extends boolean = true> {
   value?: T;
   iconKey?: T;
   type?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs_select".
+ */
+export interface AuditLogsSelect<T extends boolean = true> {
+  collection?: T;
+  documentId?: T;
+  action?: T;
+  userId?: T;
+  userName?: T;
+  timestamp?: T;
+  changes?: T;
+  changeReason?: T;
+  ip?: T;
+  userAgent?: T;
+  version?: T;
+  isSnapshot?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -14,6 +14,7 @@ import { Products } from './collections/Products'
 import { CustomSolutions } from './collections/CustomSolutions'
 import { FAQs } from './collections/FAQs'
 import { Stats } from './collections/Stats'
+import { AuditLog } from './collections/AuditLog'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, BlogPosts, Jobs, Products, CustomSolutions, FAQs, Stats],
+  collections: [Users, Media, BlogPosts, Jobs, Products, CustomSolutions, FAQs, Stats, AuditLog],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
