@@ -9,6 +9,7 @@ import type {
   CollectionBeforeDeleteHook,
 } from 'payload'
 import { calculateDiff, type FieldChange } from './diffCalculator'
+import { cleanupDocumentAuditLogs } from './auditCleanup'
 
 export interface AuditConfig {
   excludeFields: string[]
@@ -148,6 +149,18 @@ export function createAfterChangeHook(
           isSnapshot,
         },
         req,
+      })
+
+      // Cleanup old audit logs (on-write strategy)
+      // Run in background to not block the response
+      setImmediate(async () => {
+        try {
+          await cleanupDocumentAuditLogs(req.payload, collectionSlug, String(doc.id), config)
+        } catch (cleanupError) {
+          req.payload.logger.warn(
+            `Failed to cleanup audit logs: ${cleanupError instanceof Error ? cleanupError.message : 'Unknown error'}`,
+          )
+        }
       })
     } catch (error) {
       // Log error but don't fail the original operation
