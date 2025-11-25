@@ -176,8 +176,15 @@ export interface Media {
  */
 export interface BlogPost {
   id: number;
-  slug: string;
   title: string;
+  /**
+   * Auto-generated from title when you save.
+   */
+  slug?: string | null;
+  /**
+   * Defaults to current user. Select another user to write on their behalf.
+   */
+  author: number | User;
   category?: string | null;
   description?: string | null;
   body?: {
@@ -196,15 +203,21 @@ export interface BlogPost {
     [k: string]: unknown;
   } | null;
   date?: string | null;
-  readTime?: string | null;
   coverImage?: (number | null) | Media;
-  author?: string | null;
   tags?:
     | {
         tag?: string | null;
         id?: string | null;
       }[]
     | null;
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -214,8 +227,11 @@ export interface BlogPost {
  */
 export interface Job {
   id: number;
-  slug: string;
   title: string;
+  /**
+   * Auto-generated from title when you save.
+   */
+  slug?: string | null;
   location?: string | null;
   type?: ('Full time' | 'Part time' | 'Contract' | 'Intern') | null;
   salaryRange?: string | null;
@@ -268,6 +284,14 @@ export interface Job {
   applyBefore?: string | null;
   status?: ('open' | 'closed') | null;
   date?: string | null;
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -277,8 +301,11 @@ export interface Job {
  */
 export interface Product {
   id: number;
-  slug: string;
   name: string;
+  /**
+   * Auto-generated from name when you save.
+   */
+  slug?: string | null;
   subtitle?: string | null;
   heroImage?: (number | null) | Media;
   gallery?:
@@ -320,6 +347,14 @@ export interface Product {
     | boolean
     | null;
   price?: string | null;
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -329,8 +364,11 @@ export interface Product {
  */
 export interface CustomSolution {
   id: number;
-  slug: string;
   title: string;
+  /**
+   * Auto-generated from title when you save.
+   */
+  slug?: string | null;
   description?: string | null;
   image?: (number | null) | Media;
   features?:
@@ -344,6 +382,14 @@ export interface CustomSolution {
   category?: string | null;
   price?: string | null;
   available?: boolean | null;
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -358,6 +404,14 @@ export interface Faq {
   locale?: ('en' | 'ja') | null;
   category?: string | null;
   order?: number | null;
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -371,6 +425,14 @@ export interface Stat {
   value: string;
   iconKey?: string | null;
   type: 'animated' | 'static';
+  /**
+   * User who created this record
+   */
+  created_by?: (number | null) | User;
+  /**
+   * User who last updated this record
+   */
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -517,21 +579,22 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "blog-posts_select".
  */
 export interface BlogPostsSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
+  slug?: T;
+  author?: T;
   category?: T;
   description?: T;
   body?: T;
   date?: T;
-  readTime?: T;
   coverImage?: T;
-  author?: T;
   tags?:
     | T
     | {
         tag?: T;
         id?: T;
       };
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -540,8 +603,8 @@ export interface BlogPostsSelect<T extends boolean = true> {
  * via the `definition` "jobs_select".
  */
 export interface JobsSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
+  slug?: T;
   location?: T;
   type?: T;
   salaryRange?: T;
@@ -580,6 +643,8 @@ export interface JobsSelect<T extends boolean = true> {
   applyBefore?: T;
   status?: T;
   date?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -588,8 +653,8 @@ export interface JobsSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  slug?: T;
   name?: T;
+  slug?: T;
   subtitle?: T;
   heroImage?: T;
   gallery?:
@@ -609,6 +674,8 @@ export interface ProductsSelect<T extends boolean = true> {
   overview?: T;
   specs?: T;
   price?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -617,8 +684,8 @@ export interface ProductsSelect<T extends boolean = true> {
  * via the `definition` "custom-solutions_select".
  */
 export interface CustomSolutionsSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
+  slug?: T;
   description?: T;
   image?: T;
   features?:
@@ -632,6 +699,8 @@ export interface CustomSolutionsSelect<T extends boolean = true> {
   category?: T;
   price?: T;
   available?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -645,6 +714,8 @@ export interface FaqsSelect<T extends boolean = true> {
   locale?: T;
   category?: T;
   order?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -657,6 +728,8 @@ export interface StatsSelect<T extends boolean = true> {
   value?: T;
   iconKey?: T;
   type?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }

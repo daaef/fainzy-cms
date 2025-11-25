@@ -1,4 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from '../fields/slug'
+import { auditFields } from '../fields/auditFields'
+import { auditHook } from '../hooks/auditHooks'
 
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -7,19 +10,35 @@ export const BlogPosts: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'date'],
+    defaultColumns: ['title', 'author', 'category', 'date'],
+  },
+  hooks: {
+    beforeChange: [
+      auditHook,
+      async ({ data, req }) => {
+        // Set author to current user if not specified
+        if (!data?.author && req.user) {
+          data.author = req.user.id
+        }
+        return data
+      },
+    ],
   },
   fields: [
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-    },
     {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    slugField('title'),
+    {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+      required: true,
+      admin: {
+        description: 'Defaults to current user. Select another user to write on their behalf.',
+      },
     },
     {
       name: 'category',
@@ -38,17 +57,9 @@ export const BlogPosts: CollectionConfig = {
       type: 'date',
     },
     {
-      name: 'readTime',
-      type: 'text',
-    },
-    {
       name: 'coverImage',
       type: 'relationship',
       relationTo: 'media',
-    },
-    {
-      name: 'author',
-      type: 'text',
     },
     {
       name: 'tags',
@@ -57,5 +68,6 @@ export const BlogPosts: CollectionConfig = {
         { name: 'tag', type: 'text' },
       ],
     },
+    ...auditFields(),
   ],
 }

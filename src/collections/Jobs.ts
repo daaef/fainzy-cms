@@ -1,4 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from '../fields/slug'
+import { auditFields } from '../fields/auditFields'
+import { auditHook } from '../hooks/auditHooks'
 
 export const Jobs: CollectionConfig = {
   slug: 'jobs',
@@ -9,9 +12,12 @@ export const Jobs: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'location', 'type', 'status'],
   },
+  hooks: {
+    beforeChange: [auditHook],
+  },
   fields: [
-    { name: 'slug', type: 'text', required: true, unique: true },
     { name: 'title', type: 'text', required: true },
+    slugField('title'),
     { name: 'location', type: 'text' },
     { name: 'type', type: 'select', options: ['Full time', 'Part time', 'Contract', 'Intern'] },
     { name: 'salaryRange', type: 'text' },
@@ -41,5 +47,6 @@ export const Jobs: CollectionConfig = {
     { name: 'applyBefore', type: 'date' },
     { name: 'status', type: 'select', options: ['open', 'closed'], defaultValue: 'open' },
     { name: 'date', type: 'date' },
+    ...auditFields(),
   ],
 }
