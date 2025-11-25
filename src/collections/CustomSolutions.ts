@@ -1,7 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
-import { auditFields } from '../fields/auditFields'
-import { auditHook } from '../hooks/auditHooks'
 
 export const CustomSolutions: CollectionConfig = {
   slug: 'custom-solutions',
@@ -11,9 +9,6 @@ export const CustomSolutions: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'slug'],
-  },
-  hooks: {
-    beforeChange: [auditHook],
   },
   fields: [
     { name: 'title', type: 'text', required: true },
@@ -32,6 +27,5 @@ export const CustomSolutions: CollectionConfig = {
     { name: 'category', type: 'text' },
     { name: 'price', type: 'text' },
     { name: 'available', type: 'checkbox', defaultValue: true },
-    ...auditFields(),
   ],
 }

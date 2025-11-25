@@ -14,6 +14,7 @@ import { Products } from './collections/Products'
 import { CustomSolutions } from './collections/CustomSolutions'
 import { FAQs } from './collections/FAQs'
 import { Stats } from './collections/Stats'
+import { auditPlugin } from './plugins/auditPlugin'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -39,5 +40,8 @@ export default buildConfig({
   sharp,
   plugins: [
     // storage-adapter-placeholder
+    auditPlugin({
+      exclude: ['users', 'media'], // Don't add audit fields to these collections
+    }),
   ],
 })

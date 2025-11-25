@@ -1,7 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
-import { auditFields } from '../fields/auditFields'
-import { auditHook } from '../hooks/auditHooks'
 
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -14,7 +12,6 @@ export const BlogPosts: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      auditHook,
       async ({ data, req }) => {
         // Set author to current user if not specified
         if (!data?.author && req.user) {
@@ -68,6 +65,5 @@ export const BlogPosts: CollectionConfig = {
         { name: 'tag', type: 'text' },
       ],
     },
-    ...auditFields(),
   ],
 }
