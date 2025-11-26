@@ -1,5 +1,5 @@
-import type { Field } from 'payload'
-import { slugify } from '../utils/slugify'
+import type { TextField } from 'payload'
+import { slugify } from '@/utils/slugify'
 
 /**
  * Creates a slug field that auto-generates from a specified field (usually 'title' or 'name')
@@ -9,8 +9,8 @@ import { slugify } from '../utils/slugify'
  */
 export const slugField = (
   fieldToSlugify = 'title',
-  overrides?: Partial<Field>
-): Field => ({
+  overrides?: Partial<Omit<TextField, 'type'>>
+): TextField => ({
   name: 'slug',
   type: 'text',
   unique: true,
@@ -31,4 +31,4 @@ export const slugField = (
     ],
   },
   ...overrides,
-})
+} as TextField)
